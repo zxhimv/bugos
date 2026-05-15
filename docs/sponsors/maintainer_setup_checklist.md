@@ -2,14 +2,15 @@
 
 Status: draft for human review
 
-This checklist is for manual setup outside the repository. Do not commit payout, tax, identity, billing, or private sponsor data to the repository.
+This checklist is for manual setup outside the repository. Do not commit payout, tax, identity, billing, card, bank, PayPal account, or private sponsor data to the repository.
 
 ## Repository Setup
 
 - [ ] `.github/FUNDING.yml` exists on the default branch.
-- [ ] Funding config uses GitHub Sponsors only unless external links are separately reviewed.
+- [ ] Funding config uses GitHub Sponsors and the reviewed public PayPal seller QR-code payment URL only.
 - [ ] README explains sponsorship boundaries.
 - [ ] Sponsor language does not imply target testing, scanning, exploitation, payloads, credentials, report submission, or guaranteed outcomes.
+- [ ] PayPal is presented only as a public funding URL, not as checkout automation.
 
 ## GitHub Sponsors Account Setup
 
@@ -24,12 +25,24 @@ Complete manually in GitHub:
 - [ ] Review sponsor tier text before publishing.
 - [ ] Confirm cancellation/refund expectations.
 
+## PayPal Account Setup
+
+Complete manually in PayPal:
+
+- [ ] Confirm the public PayPal QR-code/payment link points to the intended account.
+- [ ] Complete identity checks directly in PayPal if required.
+- [ ] Complete payout setup directly in PayPal.
+- [ ] Review fees, disputes, refunds, reserves, and account limits.
+- [ ] Confirm bookkeeping and tax treatment with the relevant adviser.
+- [ ] Do not commit PayPal login, payout, card, bank, tax, identity, billing, or transaction data.
+
 ## Tax / Legal / Privacy Review
 
 Before promotion:
 
 - [ ] Tax treatment reviewed.
 - [ ] Public sponsor wording reviewed.
+- [ ] PayPal public-link use reviewed.
 - [ ] Benefits do not create unsafe service obligations.
 - [ ] No private customer data is accepted through sponsorship.
 - [ ] No sponsor benefit implies real target work.
@@ -42,6 +55,8 @@ Never commit:
 - payout account details
 - tax identification numbers
 - identity documents
+- card or bank details
+- PayPal login or private account details
 - billing records
 - private sponsor messages
 - customer data
@@ -66,7 +81,8 @@ Do not use:
 Before promoting sponsorship publicly, confirm:
 
 - repository wording is safe
-- GitHub Sponsors account is active
+- GitHub Sponsors account is active or intentionally pending
+- PayPal public link resolves to the intended account
 - tax/payout setup is complete
 - benefits are reviewed
 - no unsafe capability is promised
