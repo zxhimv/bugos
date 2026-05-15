@@ -107,7 +107,12 @@ class FinalSubmissionCheck:
     blockers: list[str] = field(default_factory=list)
     warnings: list[str] = field(default_factory=list)
     required_human_checks: list[str] = field(default_factory=list)
+    ready_for_human_review: bool = False
+    automatic_submission_allowed: bool = False
     created_at: str = field(default_factory=utc_now_iso)
 
     def to_dict(self) -> dict[str, Any]:
-        return asdict(self)
+        data = asdict(self)
+        data["ready"] = self.ready_for_human_review
+        data["ready_meaning"] = "ready_for_human_review_only_not_submission_approval"
+        return data

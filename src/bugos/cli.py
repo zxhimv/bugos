@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import argparse
+import json
+import sys
 from pathlib import Path
 from typing import Any
 
@@ -10,49 +12,78 @@ from .brief_normalizer import normalize_brief_dict
 from .brief_schema_validator import validate_brief_dict
 from .evidence_manifest import build_manifest
 from .final_submission_check import final_check
-from .io_safe import read_json, read_text, write_json, write_text
+from .io_safe import SafeIOError, read_json, read_text, resolve_safe, write_json, write_text
 from .models import ProgramProfile, ScopeAsset
 from .report_linter import lint_report_markdown
 from .scope_guard import check_scope
 
 
+class BugosCLIError(ValueError):
+    """Raised for expected, user-facing CLI input errors."""
+
+
+def _require_object(value: Any, label: str) -> dict[str, Any]:
+    if not isinstance(value, dict):
+        raise BugosCLIError(f"{label}_must_be_json_object")
+    return value
+
+
+def _require_list(value: Any, label: str) -> list[Any]:
+    if not isinstance(value, list):
+        raise BugosCLIError(f"{label}_must_be_json_array")
+    return value
+
+
+def _load_json_object(path: str | Path, label: str) -> dict[str, Any]:
+    return _require_object(read_json(path), label)
+
+
 def _profile_from_dict(data: dict[str, Any]) -> ProgramProfile:
-    return ProgramProfile(
-        program_name=data.get("program_name", "unknown"),
-        platform=data.get("platform", "Bugcrowd"),
-        brief_version=data.get("brief_version", "unknown"),
-        engagement_status=data.get("engagement_status", "unknown"),
-        collected_at=data.get("collected_at") or data.get("created_at") or "unknown",
-        targets=[
+    targets_raw = _require_list(data.get("targets", []), "profile.targets")
+    targets: list[ScopeAsset] = []
+    for idx, target in enumerate(targets_raw):
+        if not isinstance(target, dict):
+            raise BugosCLIError(f"profile.targets[{idx}]_must_be_json_object")
+        allowed_actions = target.get("allowed_actions", []) or []
+        if not isinstance(allowed_actions, list):
+            raise BugosCLIError(f"profile.targets[{idx}].allowed_actions_must_be_json_array")
+        targets.append(
             ScopeAsset(
-                identifier=t.get("identifier", ""),
-                asset_type=t.get("asset_type", "url"),
-                in_scope=bool(t.get("in_scope", False)),
-                allowed_actions=list(t.get("allowed_actions", []) or []),
-                notes=t.get("notes", ""),
+                identifier=str(target.get("identifier", "")).strip(),
+                asset_type=str(target.get("asset_type", "url")).strip() or "url",
+                in_scope=target.get("in_scope") is True,
+                allowed_actions=[str(action) for action in allowed_actions],
+                notes=str(target.get("notes", "")),
             )
-            for t in data.get("targets", [])
-        ],
-        out_of_scope=list(data.get("out_of_scope", []) or []),
-        known_issues=list(data.get("known_issues", []) or []),
-        rules=list(data.get("rules", []) or []),
-        rewards=dict(data.get("rewards", {}) or {}),
-        submission_limits=dict(data.get("submission_limits", {}) or {}),
+        )
+
+    return ProgramProfile(
+        program_name=str(data.get("program_name", "unknown")),
+        platform=str(data.get("platform", "Bugcrowd")),
+        brief_version=str(data.get("brief_version", "unknown")),
+        engagement_status=str(data.get("engagement_status", "unknown")),
+        collected_at=str(data.get("collected_at") or data.get("created_at") or "unknown"),
+        targets=targets,
+        out_of_scope=[str(item) for item in _require_list(data.get("out_of_scope", []), "profile.out_of_scope")],
+        known_issues=[str(item) for item in _require_list(data.get("known_issues", []), "profile.known_issues")],
+        rules=[str(item) for item in _require_list(data.get("rules", []), "profile.rules")],
+        rewards=_require_object(data.get("rewards", {}) or {}, "profile.rewards"),
+        submission_limits=_require_object(data.get("submission_limits", {}) or {}, "profile.submission_limits"),
         test_accounts_allowed=data.get("test_accounts_allowed"),
-        disclosure_rules=list(data.get("disclosure_rules", []) or []),
-        human_gate_required=bool(data.get("human_gate_required", True)),
-        notes=data.get("notes", ""),
+        disclosure_rules=[str(item) for item in _require_list(data.get("disclosure_rules", []), "profile.disclosure_rules")],
+        human_gate_required=data.get("human_gate_required", True) is True,
+        notes=str(data.get("notes", "")),
     )
 
 
 def _cmd_validate_brief(args: argparse.Namespace) -> int:
-    result = validate_brief_dict(read_json(args.brief))
+    result = validate_brief_dict(_load_json_object(args.brief, "brief"))
     write_json(args.out, result)
     return 0 if result["valid"] else 2
 
 
 def _cmd_normalize_brief(args: argparse.Namespace) -> int:
-    data = read_json(args.brief)
+    data = _load_json_object(args.brief, "brief")
     validation = validate_brief_dict(data)
     profile = normalize_brief_dict(data).to_dict()
     profile["validation"] = validation
@@ -61,7 +92,7 @@ def _cmd_normalize_brief(args: argparse.Namespace) -> int:
 
 
 def _cmd_scope_check(args: argparse.Namespace) -> int:
-    profile = _profile_from_dict(read_json(args.profile))
+    profile = _profile_from_dict(_load_json_object(args.profile, "profile"))
     decision = check_scope(profile, args.target, args.action)
     write_json(args.out, decision.to_dict())
     return 0 if decision.decision != "BLOCK" else 2
@@ -81,17 +112,17 @@ def _cmd_build_evidence(args: argparse.Namespace) -> int:
 
 def _cmd_final_check(args: argparse.Namespace) -> int:
     check = final_check(
-        profile=read_json(args.profile),
-        scope_decision=read_json(args.scope_decision),
-        report_lint=read_json(args.report_lint),
-        manifest=read_json(args.manifest),
+        profile=_load_json_object(args.profile, "profile"),
+        scope_decision=_load_json_object(args.scope_decision, "scope_decision"),
+        report_lint=_load_json_object(args.report_lint, "report_lint"),
+        manifest=_load_json_object(args.manifest, "manifest"),
     )
     write_json(args.out, check.to_dict())
-    return 0 if check.ready else 2
+    return 0 if check.ready_for_human_review else 2
 
 
 def _cmd_run_demo(args: argparse.Namespace) -> int:
-    workspace = Path(args.workspace)
+    workspace = resolve_safe(args.workspace)
     workspace.mkdir(parents=True, exist_ok=True)
     evidence_dir = workspace / "evidence"
     evidence_dir.mkdir(exist_ok=True)
@@ -156,7 +187,7 @@ Enforce object-level authorization server-side for every account lookup and veri
     lint = lint_report_markdown(report)
     write_json(workspace / "report_lint.json", lint)
     write_json(workspace / "final_submission_check.json", final_check(profile.to_dict(), decision.to_dict(), lint, manifest.to_dict()).to_dict())
-    write_text(workspace / "README_DEMO.md", "Synthetic bugos demo completed. No network or real target interaction occurred.\n")
+    write_text(workspace / "README_DEMO.md", "Synthetic bugos demo completed. No network or real target interaction occurred. Final readiness means ready for human review only.\n")
     return 0
 
 
@@ -180,9 +211,41 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
+def _safe_error_payload(error: str, message: str, warnings: list[str] | None = None) -> dict[str, Any]:
+    return {
+        "ok": False,
+        "error": error,
+        "errors": [message],
+        "warnings": warnings or [],
+    }
+
+
+def _write_error(args: argparse.Namespace, payload: dict[str, Any]) -> None:
+    out = getattr(args, "out", None)
+    if out:
+        try:
+            write_json(out, payload)
+            return
+        except Exception:
+            pass
+    print(json.dumps(payload, indent=2, ensure_ascii=False, sort_keys=True), file=sys.stderr)
+
+
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
-    return args.func(args)
+    try:
+        return args.func(args)
+    except FileNotFoundError as exc:
+        _write_error(args, _safe_error_payload("file_not_found", str(exc)))
+    except json.JSONDecodeError as exc:
+        _write_error(args, _safe_error_payload("invalid_json", f"invalid_json:{exc.msg}:line_{exc.lineno}:column_{exc.colno}"))
+    except PermissionError as exc:
+        _write_error(args, _safe_error_payload("permission_denied", str(exc)))
+    except OSError as exc:
+        _write_error(args, _safe_error_payload("io_error", str(exc)))
+    except (BugosCLIError, SafeIOError, TypeError, ValueError) as exc:
+        _write_error(args, _safe_error_payload("invalid_input", str(exc)))
+    return 2
 
 
 if __name__ == "__main__":
