@@ -1,0 +1,7 @@
+# Conservative project-scoped Codex settings.
+# Keep network disabled unless a human explicitly approves a narrow need.
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"
+
+[network]
+enabled = false
