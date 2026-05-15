@@ -1,4 +1,4 @@
-# bugos v0.1.0
+# bugos v0.1.1
 
 Offline-first Bugcrowd operations helper for authorized bug bounty work.
 
