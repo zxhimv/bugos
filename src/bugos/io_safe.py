@@ -18,7 +18,18 @@ SECRET_PATTERNS = [
 ]
 
 
+class SafeIOError(ValueError):
+    """Raised when local file access would leave the current workspace."""
+
+
 def resolve_safe(path: str | Path, base: str | Path | None = None) -> Path:
+    """Resolve *path* under *base* and reject traversal outside that tree.
+
+    The default base is the process working directory, which keeps all CLI file
+    access inside the local repository/workspace unless a narrower base is
+    passed by a caller.
+    """
+
     base_path = Path(base or Path.cwd()).resolve()
     candidate = Path(path)
     if not candidate.is_absolute():
@@ -27,26 +38,33 @@ def resolve_safe(path: str | Path, base: str | Path | None = None) -> Path:
     try:
         resolved.relative_to(base_path)
     except ValueError as exc:
-        raise ValueError(f"Unsafe path outside workspace: {resolved}") from exc
+        raise SafeIOError(f"path_outside_workspace:{_display_path(resolved)}") from exc
     return resolved
 
 
-def read_text(path: str | Path) -> str:
-    return Path(path).read_text(encoding="utf-8")
+def _display_path(path: Path) -> str:
+    try:
+        return str(path.relative_to(Path.cwd().resolve()))
+    except ValueError:
+        return str(path)
 
 
-def write_text(path: str | Path, data: str) -> None:
-    target = Path(path)
+def read_text(path: str | Path, *, base: str | Path | None = None) -> str:
+    return resolve_safe(path, base).read_text(encoding="utf-8")
+
+
+def write_text(path: str | Path, data: str, *, base: str | Path | None = None) -> None:
+    target = resolve_safe(path, base)
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(data, encoding="utf-8")
 
 
-def read_json(path: str | Path) -> Any:
-    return json.loads(read_text(path))
+def read_json(path: str | Path, *, base: str | Path | None = None) -> Any:
+    return json.loads(read_text(path, base=base))
 
 
-def write_json(path: str | Path, data: Any) -> None:
-    write_text(path, json.dumps(data, indent=2, ensure_ascii=False, sort_keys=True) + "\n")
+def write_json(path: str | Path, data: Any, *, base: str | Path | None = None) -> None:
+    write_text(path, json.dumps(data, indent=2, ensure_ascii=False, sort_keys=True) + "\n", base=base)
 
 
 def redact_secrets(text: str) -> tuple[str, list[str]]:

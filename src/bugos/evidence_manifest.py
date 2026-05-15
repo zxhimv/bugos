@@ -6,14 +6,14 @@ import mimetypes
 from pathlib import Path
 
 from .hashing import sha256_file
-from .io_safe import read_text, redact_secrets
+from .io_safe import read_text, redact_secrets, resolve_safe
 from .models import EvidenceItem, EvidenceManifest
 
 TEXT_SUFFIXES = {".txt", ".md", ".json", ".har", ".log", ".yaml", ".yml", ".csv"}
 
 
 def build_manifest(evidence_dir: str | Path) -> EvidenceManifest:
-    root = Path(evidence_dir)
+    root = resolve_safe(evidence_dir)
     manifest = EvidenceManifest()
     if not root.exists():
         manifest.warnings.append("evidence_dir_missing")
@@ -21,9 +21,17 @@ def build_manifest(evidence_dir: str | Path) -> EvidenceManifest:
     if not root.is_dir():
         manifest.warnings.append("evidence_path_not_directory")
         return manifest
+    if Path(evidence_dir).is_symlink():
+        manifest.warnings.append("evidence_dir_symlink_blocked")
+        return manifest
 
-    files = sorted([p for p in root.rglob("*") if p.is_file()])
+    files = sorted([p for p in root.rglob("*") if p.is_file() or p.is_symlink()])
     for idx, path in enumerate(files, start=1):
+        relative_path = str(path.relative_to(root))
+        if path.is_symlink():
+            manifest.warnings.append(f"evidence_symlink_blocked:{relative_path}")
+            continue
+
         redaction_status = "unverified"
         notes = ""
         if path.suffix.lower() in TEXT_SUFFIXES:
@@ -36,8 +44,8 @@ def build_manifest(evidence_dir: str | Path) -> EvidenceManifest:
         mime, _ = mimetypes.guess_type(str(path))
         manifest.items.append(
             EvidenceItem(
-                evidence_id=f"E{idx:02d}",
-                path=str(path.relative_to(root)),
+                evidence_id=f"E{len(manifest.items) + 1:02d}",
+                path=relative_path,
                 sha256=sha256_file(path),
                 size_bytes=path.stat().st_size,
                 mime_guess=mime or "application/octet-stream",

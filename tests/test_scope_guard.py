@@ -26,3 +26,14 @@ def test_scope_guard_requires_human_review_for_allowed_plan():
     d = check_scope(_profile(), "https://app.demo.example/path", "manual read-only authorization check")
     assert d.decision == "NEEDS_HUMAN_REVIEW"
     assert d.matched_assets
+
+
+def test_scope_guard_blocks_credential_stuffing_phrase():
+    d = check_scope(_profile(), "https://app.demo.example/path", "credential stuffing validation")
+    assert d.decision == "BLOCK"
+    assert "blocked_action_keyword:credential stuffing" in d.reasons
+
+
+def test_scope_guard_blocks_customer_data_phrase():
+    d = check_scope(_profile(), "https://app.demo.example/path", "manual customer data review")
+    assert d.decision == "BLOCK"
