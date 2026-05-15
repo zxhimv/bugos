@@ -11,10 +11,10 @@ It performs no network access and does not import project runtime modules.
 from __future__ import annotations
 
 import json
-import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+SCRIPT_RELATIVE_PATH = Path("scripts/check_safety_invariants.py")
 
 TEXT_SUFFIXES = {
     ".md",
@@ -37,12 +37,14 @@ SKIP_DIRS = {
     "demo_out",
 }
 
+# Build forbidden strings from fragments so this checker does not match its own
+# source code while scanning the repository.
 FORBIDDEN_TEXT_PATTERNS = [
-    "automatic_submission_allowed\": true",
-    "automatic_submission_allowed: true",
-    "decision\": \"ALLOW\"",
-    "decision: ALLOW",
-    "final decision: ALLOW",
+    "automatic_submission_allowed" + "\": " + "true",
+    "automatic_submission_allowed" + ": " + "true",
+    "decision" + "\": \"" + "ALLOW" + "\"",
+    "decision" + ": " + "ALLOW",
+    "final decision" + ": " + "ALLOW",
 ]
 
 HIGH_RISK_TERMS = {
@@ -110,6 +112,11 @@ def scan_text(path: Path, errors: list[str], warnings: list[str]) -> None:
     for pattern in FORBIDDEN_TEXT_PATTERNS:
         if pattern.lower() in lower_text:
             errors.append(f"Forbidden safety regression found in {relative(path)}: {pattern}")
+
+    # The checker itself necessarily contains the review vocabulary. Do not turn
+    # its own dictionary into warning noise.
+    if Path(relative(path)) == SCRIPT_RELATIVE_PATH:
+        return
 
     for line_number, line in enumerate(text.splitlines(), start=1):
         lower_line = line.lower()
