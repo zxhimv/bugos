@@ -1,0 +1,39 @@
+{
+  "program_name": "Synthetic Demo Program",
+  "platform": "Bugcrowd",
+  "brief_version": "synthetic-v0",
+  "engagement_status": "demo_only",
+  "targets": [
+    {
+      "identifier": "https://app.demo.example",
+      "asset_type": "url",
+      "in_scope": true,
+      "allowed_actions": ["manual", "read-only", "authorization"],
+      "notes": "Synthetic local demo only. Not a real target."
+    }
+  ],
+  "out_of_scope": [
+    "denial of service",
+    "bruteforce",
+    "social engineering",
+    "customer data"
+  ],
+  "known_issues": [
+    "generic reflected XSS on marketing pages"
+  ],
+  "rules": [
+    "Human approval required before any real target interaction."
+  ],
+  "rewards": {
+    "P1": "program-specific",
+    "P2": "program-specific"
+  },
+  "submission_limits": {
+    "pending_limit": 5
+  },
+  "test_accounts_allowed": true,
+  "disclosure_rules": [
+    "No public disclosure without approval."
+  ],
+  "human_gate_required": true
+}
