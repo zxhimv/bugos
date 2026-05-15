@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0",
+  "program": "Quizlet",
+  "status": "PREPARE_ONLY",
+  "decision": "BLOCK",
+  "ready": false,
+  "ready_for_human_review": false,
+  "automatic_submission_allowed": false,
+  "checked_at": "2026-05-15",
+  "checks": {
+    "authoritative_policy_verified": false,
+    "scope_confirmed": false,
+    "evidence_collected": false,
+    "evidence_redacted": false,
+    "human_review_complete": false,
+    "submission_authorized": false,
+    "network_access_used": false,
+    "target_contacted": false,
+    "credentials_retrieved": false,
+    "password_reset_actions_performed": false,
+    "scanners_used": false,
+    "exploits_used": false,
+    "payload_functions_added": false
+  },
+  "blockers": [
+    "Authoritative policy was not retrieved.",
+    "Program scope is unknown.",
+    "No evidence was collected.",
+    "No human review was performed.",
+    "Automatic submission is not allowed and must remain disabled."
+  ],
+  "required_to_unblock_in_future_authorized_workflow": [
+    "Verify current authoritative program policy.",
+    "Record in-scope and out-of-scope assets.",
+    "Confirm safe evidence-handling rules.",
+    "Complete human review.",
+    "Keep automatic_submission_allowed false. Automatic submission must remain disabled in this project."
+  ]
+}

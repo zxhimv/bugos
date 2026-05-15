@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "intake_pack": "quizlet-prepare-only",
+  "created_at": "2026-05-15",
+  "status": "PREPARE_ONLY",
+  "program": {
+    "name": "Quizlet",
+    "slug": "quizlet",
+    "policy_source_status": "not_retrieved",
+    "policy_source_reason": "Network access, external links, and program-target interaction were explicitly disallowed for this intake.",
+    "policy_snapshot_date": null,
+    "authoritative_scope_available": false
+  },
+  "scope": {
+    "in_scope": [],
+    "out_of_scope": [],
+    "unknown_scope": true,
+    "notes": [
+      "No target, policy page, or external source was opened.",
+      "Scope must be verified by a human from an authoritative program source before any testing."
+    ]
+  },
+  "safety_gates": {
+    "automatic_submission_allowed": false,
+    "target_interaction_allowed": false,
+    "network_access_allowed": false,
+    "credential_access_allowed": false,
+    "password_reset_allowed": false,
+    "scanner_allowed": false,
+    "exploit_allowed": false,
+    "payload_allowed": false
+  },
+  "allowed_prepare_only_actions": [
+    "Maintain local intake documents under docs/intakes/quizlet/.",
+    "Review templates locally without opening program targets or external links.",
+    "Record future human review requirements without collecting secrets or account data."
+  ],
+  "prohibited_actions": [
+    "Network access to program assets or external references.",
+    "Program-target interaction of any kind.",
+    "Automated scanning or discovery.",
+    "Exploit development or execution.",
+    "Payload creation, storage, or execution.",
+    "Credential retrieval or handling.",
+    "Password reset actions.",
+    "Automatic submission, merge, or pull request creation from inside this intake workflow."
+  ],
+  "open_questions": [
+    "What is the current authoritative scope?",
+    "What vulnerability classes are accepted, excluded, or require special permission?",
+    "What evidence format does the program require?",
+    "What duplicate or known-issue guidance applies?"
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0",
+  "program": "Quizlet",
+  "status": "PREPARE_ONLY",
+  "manifest_state": "template_only",
+  "evidence_collected": false,
+  "network_access_used": false,
+  "target_contacted": false,
+  "credentials_collected": false,
+  "password_reset_actions_performed": false,
+  "scanners_used": false,
+  "exploits_used": false,
+  "payloads_used": false,
+  "artifacts": [],
+  "redaction_requirements": [
+    "Do not store credentials, tokens, session values, private user data, payment data, classroom data, or personal data.",
+    "Use placeholders for sensitive values.",
+    "Record only evidence that was obtained in an authorized future workflow."
+  ],
+  "required_before_human_review": [
+    "Authoritative policy snapshot recorded.",
+    "Scope confirmed.",
+    "Evidence artifacts listed with local paths.",
+    "Sensitive data redacted.",
+    "final_submission_check.json updated in an authorized workflow while automatic_submission_allowed remains false."
+  ],
+  "automatic_submission_allowed": false
+}
