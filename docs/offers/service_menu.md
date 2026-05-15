@@ -2,127 +2,200 @@
 
 Status: draft for human review
 
-This document turns `bugos` into safe, sellable offers. It is not legal, tax, or financial advice. It must be reviewed before external use.
+This document implements REV-002 from `docs/revenue_backlog.md`. It turns `bugos` into safe, sellable offers. It is not legal, tax, or financial advice. It must be reviewed before external use.
 
 ## Positioning
 
-`bugos` is an offline-first preparation and review workflow for authorized security operations. It helps structure program briefs, scope blockers, evidence hygiene, report drafts, and final human-review gates. It does not scan, exploit, contact targets, handle credentials, or submit reports.
+`bugos` is an offline-first preparation and review workflow for authorized security operations. It helps structure redacted program briefs, scope blockers, evidence hygiene, report drafts, and final human-review gates. It does not scan, exploit, contact targets, handle credentials, run payloads, or submit reports.
+
+## Global Boundaries
+
+These boundaries apply to every offer:
+
+- Prepare-only unless separately reviewed by a qualified human.
+- Human-review required before any real-world action.
+- No automatic submission.
+- `automatic_submission_allowed` remains `false`.
+- No income, payout, or valid-finding guarantee.
+- No legal, tax, or financial advice.
+- No secrets, credentials, tokens, cookies, session data, payment data, classroom data, or third-party personal data.
 
 ## Offer 1: Redacted Program Brief Intake Pack
 
-### Buyer
+### Service Description
 
-- Bug bounty researchers who already work under authorized program rules.
-- Small security teams that need structured pre-test review.
-- Operators who want better scope discipline before manual work.
+Transforms a redacted program brief or policy excerpt into a structured local intake pack. The goal is to clarify scope, blockers, known-issue uncertainty, evidence expectations, and final human-review status before any manual work begins.
 
-### Included
+### Scope
 
-- Program profile
-- Disqualifier check
-- Known-issue map
-- Program score
-- Work order
-- Manual test cards
-- Evidence manifest template
-- Report draft template
-- Final submission check
+Included:
 
-### Excluded
+- prepare-only program analysis
+- scope and uncertainty extraction
+- disqualifier review
+- known-issue and duplicate-risk mapping
+- final readiness gate
 
-- Target testing
-- Scanning
-- Exploitation
-- Payload generation
-- Credential handling
-- Password-reset testing
-- Automated submission
-- Legal advice
+Excluded:
+
+- target testing
+- scanning
+- exploitation
+- payload generation
+- credential handling
+- password-reset testing
+- browser automation or crawling
+- automated submission
+- legal advice
 
 ### Buyer Prerequisites
 
-- Buyer provides a redacted program brief.
-- Buyer confirms they are authorized to review the program material.
-- Buyer removes secrets, credentials, tokens, private data, and third-party personal data before sharing material.
+- Buyer provides a redacted program brief or policy excerpt.
+- Buyer confirms they are authorized to use the provided material.
+- Buyer removes secrets, credentials, tokens, cookies, personal data, and private third-party data before delivery.
+- Buyer accepts that the result is preparation only.
 
-### Suggested Pricing Hypothesis
+### Output Artifacts
+
+- `program_profile.json`
+- `disqualifier_check.md`
+- `known_issue_map.md`
+- `program_score.json`
+- `work_order.json`
+- `manual_test_cards.md`
+- `evidence_manifest_template.json`
+- `report_draft_template.md`
+- `final_submission_check.json`
+
+### Pricing Draft
 
 - Basic: 49-99 EUR per redacted intake pack.
 - Standard: 149-299 EUR with one manual QA pass.
-- Custom: quote-based for teams.
+- Team/custom: quote-based.
 
-No revenue or bounty outcome is guaranteed.
+### Acceptance Criteria
+
+- All expected artifacts delivered.
+- `automatic_submission_allowed` remains `false`.
+- Final status remains `BLOCK` or `NEEDS_HUMAN_REVIEW`.
+- No target, payload, credential, or submission capability is included.
 
 ## Offer 2: Evidence Hygiene and Report Readiness Review
 
-### Buyer
+### Service Description
 
-- Authorized researchers with already-collected evidence.
-- Teams that need redaction and report-structure support before human submission review.
+Reviews already-authorized, buyer-provided materials for redaction hygiene, report structure, known-issue ambiguity, evidence completeness, and final human-review readiness.
 
-### Included
+### Scope
 
-- Evidence redaction checklist
-- Scope confirmation checklist
-- Known-issue and duplicate-risk checklist
-- Report structure review
-- Final human-review gate
+Included:
 
-### Excluded
+- evidence redaction checklist
+- scope confirmation checklist
+- duplicate and known-issue review checklist
+- report structure review
+- final human-review gate
 
-- Validating live targets
-- Creating exploit steps
-- Writing payload strings
-- Handling secrets
-- Submitting reports
+Excluded:
 
-### Suggested Pricing Hypothesis
+- validating live targets
+- creating exploit steps
+- writing payload strings
+- handling secrets, credentials, tokens, cookies, or session data
+- submitting reports
+- making validity or payout guarantees
+
+### Buyer Prerequisites
+
+- Buyer already has authorization for the underlying work.
+- Buyer provides only redacted evidence or placeholders.
+- Buyer confirms no private third-party data is included.
+- Buyer accepts that real submission remains manual and outside `bugos`.
+
+### Output Artifacts
+
+- evidence hygiene checklist
+- redaction checklist
+- report-readiness notes
+- known-issue/duplicate-risk notes
+- final human-review checklist
+
+### Pricing Draft
 
 - Basic review: 99-199 EUR.
 - Standard review: 249-499 EUR.
-- Team package: quote-based.
+- Team/custom: quote-based.
 
-No finding validity or payout is guaranteed.
+### Acceptance Criteria
+
+- Sensitive data issues are flagged.
+- Missing scope/evidence areas are explicit.
+- Report remains marked as draft/template until human approval.
+- No report is submitted automatically.
 
 ## Offer 3: Bug Bounty Operations QA Template Pack
 
-### Buyer
+### Service Description
 
-- Researchers who want reusable checklists and templates.
-- Teams building an internal intake and reporting process.
+Provides reusable prepare-only templates for researchers and teams that want a safer internal intake and report-readiness workflow.
 
-### Included
+### Scope
 
-- Prepare-only templates
-- Evidence manifest templates
-- Final submission check templates
-- Redaction checklist
-- Human-review workflow
-- Safety-gate checklist
+Included:
 
-### Excluded
+- prepare-only intake templates
+- evidence manifest templates
+- final submission check templates
+- redaction checklist
+- human-review workflow
+- safety-gate checklist
 
-- Automated testing
-- Target discovery
-- Scanner configuration
-- Exploit guidance
-- Submission automation
+Excluded:
 
-### Suggested Pricing Hypothesis
+- automated testing
+- target discovery
+- scanner configuration
+- exploit guidance
+- payload guidance
+- credential workflows
+- submission automation
+
+### Buyer Prerequisites
+
+- Buyer uses the templates only in authorized workflows.
+- Buyer performs independent legal and program-policy review.
+- Buyer keeps automatic submission disabled.
+
+### Output Artifacts
+
+- reusable template bundle
+- short usage guide
+- safety checklist
+- external-review checklist
+
+### Pricing Draft
 
 - Digital template pack: 29-79 EUR.
 - Extended pack with walkthrough: 99-149 EUR.
 
-## External-Use Warning
+### Acceptance Criteria
+
+- Templates are clearly marked prepare-only.
+- No unsafe capability is implied.
+- No income, payout, or finding validity guarantee is made.
+
+## External-Use Checklist
 
 Before using this menu externally:
 
 - Review legal wording.
 - Review tax and invoicing requirements.
 - Review consumer/business distinction.
+- Confirm privacy and data-handling notice.
 - Confirm no guarantee claims are made.
 - Confirm no unsafe capability is implied.
+- Confirm pricing and delivery terms separately.
 
 ## Safe CTA Draft
 
-`Send a redacted program brief, and I will prepare a local-only intake pack that clarifies scope blockers, evidence requirements, report structure, and human-review gates. No target testing, scanning, exploit work, credential handling, or submission is included.`
+`Send a redacted program brief, and I will prepare a local-only intake pack that clarifies scope blockers, evidence requirements, report structure, and human-review gates. No target testing, scanning, exploit work, payload generation, credential handling, or submission is included.`
