@@ -1,0 +1,47 @@
+name: Safety Validation
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+      - codex/**
+
+permissions:
+  contents: read
+
+jobs:
+  safety:
+    name: Local safety checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Validate safety invariants
+        run: python3 scripts/check_safety_invariants.py
+
+      - name: Validate Quizlet intake JSON
+        run: |
+          python3 -m json.tool docs/intakes/quizlet/program_profile.json >/dev/null
+          python3 -m json.tool docs/intakes/quizlet/program_score.json >/dev/null
+          python3 -m json.tool docs/intakes/quizlet/work_order.json >/dev/null
+          python3 -m json.tool docs/intakes/quizlet/evidence_manifest_template.json >/dev/null
+          python3 -m json.tool docs/intakes/quizlet/final_submission_check.json >/dev/null
+
+      - name: Run tests if pytest is available
+        run: |
+          if python3 -m pytest --version >/dev/null 2>&1; then
+            python3 -m pytest -q
+          else
+            echo "pytest is not installed in this runner; skipping pytest without installing dependencies."
+          fi
