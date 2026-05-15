@@ -1,0 +1,62 @@
+{
+  "schema_version": "1.0",
+  "work_order_id": "quizlet-prepare-only-intake-2026-05-15",
+  "program": "Quizlet",
+  "status": "PREPARE_ONLY",
+  "objective": "Create a local intake pack that documents blockers, templates, and safety gates without contacting targets or enabling submission.",
+  "allowed_write_paths": [
+    "docs/intakes/quizlet/"
+  ],
+  "explicitly_disallowed": [
+    "Network access",
+    "Target interaction",
+    "Tests against Quizlet",
+    "Scans",
+    "Exploits",
+    "Payloads",
+    "Credential retrieval",
+    "Password reset actions",
+    "Opening program targets",
+    "Opening external links",
+    "Weakening existing safety gates",
+    "Merging",
+    "Creating automated submission functionality"
+  ],
+  "tasks": [
+    {
+      "id": "QZ-PREP-001",
+      "title": "Create local program profile",
+      "status": "complete",
+      "output": "program_profile.json"
+    },
+    {
+      "id": "QZ-PREP-002",
+      "title": "Create disqualifier and known-issue planning notes",
+      "status": "complete",
+      "output": "disqualifier_check.md, known_issue_map.md"
+    },
+    {
+      "id": "QZ-PREP-003",
+      "title": "Create local score, evidence, report, and final-check templates",
+      "status": "complete",
+      "output": "program_score.json, evidence_manifest_template.json, report_draft_template.md, final_submission_check.json"
+    },
+    {
+      "id": "QZ-PREP-004",
+      "title": "Create manual planning cards and README",
+      "status": "complete",
+      "output": "manual_test_cards.md, README.md"
+    }
+  ],
+  "completion_criteria": {
+    "all_required_files_present": true,
+    "status_remains_prepare_only": true,
+    "decision_remains_block": true,
+    "automatic_submission_allowed": false,
+    "no_network_access": true,
+    "no_target_contact": true,
+    "no_credentials_retrieved": true,
+    "no_password_reset_actions": true,
+    "no_scanners_exploits_or_payloads": true
+  }
+}
