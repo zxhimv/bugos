@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0",
+  "program": "Quizlet",
+  "status": "PREPARE_ONLY",
+  "score_date": "2026-05-15",
+  "readiness_score": 0,
+  "confidence": "low",
+  "scoring_basis": [
+    "No authoritative policy source was retrieved.",
+    "No scope was verified.",
+    "No target interaction, testing, evidence collection, scanning, exploit work, or payload work was performed."
+  ],
+  "gate_scores": {
+    "scope_confirmed": 0,
+    "policy_confirmed": 0,
+    "evidence_available": 0,
+    "submission_ready": 0,
+    "human_review_ready": 0
+  },
+  "safety_gates": {
+    "automatic_submission_allowed": false,
+    "target_interaction_allowed": false,
+    "network_access_allowed": false,
+    "credential_access_allowed": false,
+    "password_reset_allowed": false,
+    "scanner_allowed": false,
+    "exploit_allowed": false,
+    "payload_allowed": false
+  },
+  "decision": "BLOCK",
+  "ready": false,
+  "ready_for_human_review": false
+}
