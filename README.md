@@ -14,6 +14,14 @@ Offline-first Bugcrowd operations helper for authorized bug bounty work.
 - final submission readiness checks,
 - safe No-Brief / Safe-Lab operation.
 
+## Support this work
+
+If GitHub Sponsors is enabled for this account, use the GitHub Sponsor button for repository-level support.
+
+Sponsorship supports continued work on conservative, offline-first, human-reviewed security workflow tooling. It does not buy vulnerability research, target testing, scanning, exploit work, payload generation, credential handling, report submission, priority access to unsafe capabilities, or guaranteed outcomes.
+
+See `docs/sponsors/sponsorship_overview.md` for the safe sponsorship boundary and draft tier ideas.
+
 ## Hard rule
 
 No real target interaction may occur unless a current program brief has been reviewed and the Human Gate has approved scope, out-of-scope rules, known issues, rate limits, test-account permission, disclosure rules, and submission limits.
