@@ -8,6 +8,17 @@ This document explains safe sponsorship boundaries for `bugos`.
 
 Sponsorship supports continued work on conservative, offline-first, human-reviewed security workflow tooling.
 
+## Funding Channels
+
+Repository-level funding is configured through `.github/FUNDING.yml`.
+
+Current repository funding channels:
+
+- GitHub Sponsors for `zxhimv`
+- a public PayPal seller QR-code payment link as a custom funding URL
+
+The PayPal link is a public funding URL only. It is not PayPal Checkout, not a subscription system, not an invoice workflow, not tax handling, not refund handling, and not payment automation inside the repository.
+
 ## What Sponsorship Supports
 
 Sponsorship may support:
@@ -41,11 +52,11 @@ Sponsorship does not buy:
 
 `bugos` is not a scanner, exploit framework, payload generator, credential-testing tool, target-interaction tool, browser-automation agent, crawler, or submission bot. Sponsorship does not change those boundaries.
 
-## GitHub Sponsors Setup
+## Manual Account Setup
 
-Repository-level sponsor display is configured through `.github/FUNDING.yml`.
+GitHub Sponsors account setup, payout, tax, identity, billing, and sponsor-tier setup must be completed manually in GitHub by the account owner.
 
-The GitHub Sponsors account, payout, tax, identity, billing, and sponsor-tier setup must be completed manually in GitHub by the account owner.
+PayPal account setup, payout, tax, identity, disputes, refunds, bookkeeping, and transaction review must be completed manually in PayPal or with the relevant adviser. Do not commit those details to the repository.
 
 ## Safe Sponsor Communication
 
@@ -66,7 +77,8 @@ Do not use language like:
 Before enabling or promoting sponsorship publicly, review:
 
 - GitHub Sponsors eligibility and account settings
+- PayPal public link behavior
 - payout and tax details
 - public profile wording
 - sponsor-tier wording
-- legal, privacy, tax, and platform obligations
+- legal, privacy, tax, bookkeeping, refund, dispute, and platform obligations
