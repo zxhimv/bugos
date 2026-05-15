@@ -1,0 +1,5 @@
+GET /api/accounts/123 HTTP/1.1
+Host: app.demo.example
+
+HTTP/1.1 200 OK
+{"owner":"DEMO_A","metadata":"synthetic"}
