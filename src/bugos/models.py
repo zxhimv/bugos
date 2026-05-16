@@ -109,10 +109,12 @@ class FinalSubmissionCheck:
     required_human_checks: list[str] = field(default_factory=list)
     ready_for_human_review: bool = False
     automatic_submission_allowed: bool = False
+    sentinel_policy_state: str = "NEEDS_HUMAN_REVIEW"
     created_at: str = field(default_factory=utc_now_iso)
 
     def to_dict(self) -> dict[str, Any]:
         data = asdict(self)
         data["ready"] = self.ready_for_human_review
         data["ready_meaning"] = "ready_for_human_review_only_not_submission_approval"
+        data["sentinel_policy_state_meaning"] = "local_review_state_only_not_external_action_authority"
         return data

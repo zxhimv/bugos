@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing import Any
 
 from .models import FinalSubmissionCheck
+from .sentinel.policy import DecisionState
 
 
 def _is_object(value: Any) -> bool:
@@ -66,14 +67,17 @@ def final_check(profile: dict[str, Any], scope_decision: dict[str, Any], report_
 
     decision = "NEEDS_HUMAN_REVIEW"
     ready_for_human_review = not blockers
+    sentinel_policy_state = DecisionState.NEEDS_HUMAN_REVIEW.value
     if blockers:
         decision = "BLOCK"
+        sentinel_policy_state = DecisionState.BLOCK.value
 
     return FinalSubmissionCheck(
         ready=ready_for_human_review,
         ready_for_human_review=ready_for_human_review,
         automatic_submission_allowed=False,
         decision=decision,
+        sentinel_policy_state=sentinel_policy_state,
         blockers=blockers,
         warnings=warnings,
         required_human_checks=required_human_checks,
