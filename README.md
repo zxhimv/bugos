@@ -1,5 +1,7 @@
 # bugos v0.1.1
 
+![bugos social preview](assets/bugos-social-preview.png)
+
 Offline-first Bugcrowd operations helper for authorized bug bounty work.
 
 ## Purpose
@@ -78,30 +80,3 @@ Important final-check fields:
 - `ready` and `ready_for_human_review`: mean the local artifacts have no current automated blockers and are ready for human review only.
 - `automatic_submission_allowed`: always `false`.
 - `warnings`: always includes a human-gate reminder before any submission.
-
-## Local path safety
-
-`bugos` constrains CLI reads and writes to the current workspace. It rejects traversal or absolute paths outside that workspace. Evidence symlinks are conservatively blocked and reported as manifest warnings rather than followed.
-
-## Safety boundaries
-
-Allowed:
-
-- local file parsing,
-- local hashing,
-- local report QA,
-- local synthetic fixtures,
-- local Codex-assisted implementation inside the repo workspace.
-
-Not allowed:
-
-- network access for tool operation,
-- contacting real Bugcrowd targets,
-- blind scanning,
-- exploit automation,
-- payload generation,
-- credential attacks,
-- bypass attempts,
-- accessing real customer data,
-- testing assets not explicitly in scope,
-- submitting weak or AI-generated slop reports without human review.
