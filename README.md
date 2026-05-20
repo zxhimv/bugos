@@ -108,3 +108,5 @@ Not allowed:
 - accessing real customer data,
 - testing assets not explicitly in scope,
 - submitting weak or AI-generated slop reports without human review.
+spend some money for full version
+https://www.paypal.com/qrcodes/managed/8a5c5272-9b9d-46ac-95f5-b662af83f0ac?utm_source=consapp_download
