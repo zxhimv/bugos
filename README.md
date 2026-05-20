@@ -1,6 +1,6 @@
 # bugos v0.1.1
 
-![](assets/bugos-social-preview.png)
+![](assets/bugos-social-preview.jpg)
 
 Offline-first Bugcrowd operations helper for authorized bug bounty work.
 
