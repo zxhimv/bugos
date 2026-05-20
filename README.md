@@ -1,6 +1,8 @@
 # bugos v0.1.1
 
-![bugos social preview](assets/bugos-social-preview.png)
+<p align="center">
+  <img src="https://raw.githubusercontent.com/zxhimv/bugos/main/assets/bugos-social-preview.png" alt="bugos social preview" width="100%">
+</p>
 
 Offline-first Bugcrowd operations helper for authorized bug bounty work.
 
