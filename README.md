@@ -110,3 +110,4 @@ Not allowed:
 - submitting weak or AI-generated slop reports without human review.
 spend some money for full version
 https://www.paypal.com/qrcodes/managed/8a5c5272-9b9d-46ac-95f5-b662af83f0ac?utm_source=consapp_download
+<img width="774" height="868" alt="image" src="https://github.com/user-attachments/assets/91aea850-b829-4974-8e4d-c686d1f748a9" />
